@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# Environment variables
+.env
+.env.local
+
+# Solana specific
+target/
+test-ledger/
+
+# System files
+.DS_Store
+*.log
