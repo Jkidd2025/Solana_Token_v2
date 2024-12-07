@@ -1,0 +1,26 @@
+{
+  "name": "solana-_token_v2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jkidd2025/Solana_Token_v2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jkidd2025/Solana_Token_v2/issues"
+  },
+  "homepage": "https://github.com/Jkidd2025/Solana_Token_v2#readme",
+  "dependencies": {
+    "@metaplex-foundation/mpl-token-metadata": "^3.3.0",
+    "@solana/spl-token": "^0.4.9",
+    "@solana/web3.js": "^1.95.8"
+  },
+  "devDependencies": {},
+  "description": ""
+}

@@ -17,3 +17,7 @@ test-ledger/
 # System files
 .DS_Store
 *.log
+# Project specific
+keypair.json
+logs/
+--url
