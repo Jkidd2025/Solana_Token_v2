@@ -22,3 +22,11 @@ keypair.json
 logs/
 --url
 wallets/
+
+# Distribution wallets
+wallets/
+
+# Project specific
+keypair.json
+logs/
+--url

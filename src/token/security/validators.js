@@ -17,7 +17,7 @@ class SecurityValidator {
         this.liquidityShare = 0.70; // 70% of tax goes to liquidity
         this.marketingShare = 0.30; // 30% of tax goes to marketing wallet
         
-        // Updated addresses
+        // Updated addresses with final distribution accounts
         this.liquidityPoolAddress = new web3.PublicKey('HQR488MrDvMPk6khLUfogu5QM5uqN1BrXK2fiKSUKZww');
         this.marketingWalletAddress = new web3.PublicKey('9tKxychM6es9r6x18ug3wNLb6Sgp7LCQtnWeqWbm9D2s');
     }
