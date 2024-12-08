@@ -21,3 +21,4 @@ test-ledger/
 keypair.json
 logs/
 --url
+wallets/
