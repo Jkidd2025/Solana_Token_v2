@@ -1,32 +1,4 @@
-# Dependencies
+keypair.json
+logs/
+--url
 node_modules/
-
-# Build outputs
-dist/
-build/
-.cache/
-
-# Environment variables
-.env
-.env.local
-
-# Solana specific
-target/
-test-ledger/
-
-# System files
-.DS_Store
-*.log
-# Project specific
-keypair.json
-logs/
---url
-wallets/
-
-# Distribution wallets
-wallets/
-
-# Project specific
-keypair.json
-logs/
---url

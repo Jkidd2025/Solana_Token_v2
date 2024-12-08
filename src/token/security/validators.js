@@ -5,59 +5,70 @@ class SecurityValidator {
         this.connection = connection;
         this.isPaused = false;
         
-        // Token mint address
-        this.tokenMint = new web3.PublicKey('H3hH6sQE1tizvgKrLYgvS6bJ7CzMHoK3HoWyJgdWit6e');
+        // Token Details from config
+        this.tokenMint = new web3.PublicKey('ASb6zqowvuWXSn6sZAtBByhYXEu4BaNkkvn7nUvc8PJu');
+        this.tokenAccount = new web3.PublicKey('DeAMCdKyZ5V1KG6W7qboFnv85ADWTNtUFS4aXxDcJz9P');
+        this.decimals = 9;
+        this.totalSupply = 1000000000;
         
-        // Anti-whale configurations
-        this.maxWalletBalance = 20_000_000 * (10 ** 9); // 2% of total supply
-        this.maxTransactionAmount = 5_000_000 * (10 ** 9); // 0.5% of total supply
-        this.dailyTransferLimit = 10_000_000 * (10 ** 9); // Daily transfer limit per wallet
-        this.cooldownPeriod = 60 * 60; // 1 hour cooldown between large transfers
-        
-        // Transaction tax configurations
-        this.taxRate = 0.03; // 3% tax
-        this.liquidityShare = 0.70; // 70% of tax goes to liquidity
-        this.marketingShare = 0.30; // 30% of tax goes to marketing wallet
-        
-        // Security addresses
-        this.liquidityPoolAddress = new web3.PublicKey('HQR488MrDvMPk6khLUfogu5QM5uqN1BrXK2fiKSUKZww');
-        this.marketingWalletAddress = new web3.PublicKey('9tKxychM6es9r6x18ug3wNLb6Sgp7LCQtnWeqWbm9D2s');
-        this.adminAddress = new web3.PublicKey('FRntomypvRjRS2MgKZ4Fyq3rSn2JguNR4T2kuWHFPN1k');
-
-        // Additional security features
-        this.blacklistEnabled = true;
-        this.blacklistedAddresses = new Set();
-        this.whitelistedAddresses = new Set([
-            'HQR488MrDvMPk6khLUfogu5QM5uqN1BrXK2fiKSUKZww', // Liquidity Pool
-            '9tKxychM6es9r6x18ug3wNLb6Sgp7LCQtnWeqWbm9D2s'  // Marketing
-        ]);
-        
-        // Transaction monitoring
-        this.suspiciousTransactionThreshold = 1_000_000 * (10 ** 9);
-        this.maxDailyVolume = 50_000_000 * (10 ** 9);
-        this.requiresApproval = this.suspiciousTransactionThreshold;
+        // Emergency controls
+        this.emergencyAdmin = new web3.PublicKey('FRntomypvRjRS2MgKZ4Fyq3rSn2JguNR4T2kuWHFPN1k');
+        this.lastEmergencyAction = null;
+        this.emergencyLogs = [];
     }
 
-    // Emergency controls
-    async pauseTrading() {
-        if (this.isAdmin()) {
+    async isAdmin(pubkey, silent = false) {
+        const isAdmin = pubkey.equals(this.emergencyAdmin);
+        if (isAdmin) {
+            if (!silent) this.logAction('Admin check passed', pubkey.toString());
+            return true;
+        }
+        if (!silent) this.logAction('Admin check failed', pubkey.toString());
+        return false;
+    }
+
+    async pauseTrading(pubkey) {
+        if (await this.isAdmin(pubkey)) {
             this.isPaused = true;
+            this.lastEmergencyAction = 'pause';
+            this.logAction('Trading paused', pubkey.toString());
             return true;
         }
         return false;
     }
 
-    async resumeTrading() {
-        if (this.isAdmin()) {
+    async resumeTrading(pubkey) {
+        if (await this.isAdmin(pubkey)) {
             this.isPaused = false;
+            this.lastEmergencyAction = 'resume';
+            this.logAction('Trading resumed', pubkey.toString());
             return true;
         }
         return false;
     }
 
-    isAdmin() {
-        // Implement admin check logic
-        return true; // Temporary return for testing
+    logAction(action, address) {
+        const log = {
+            timestamp: new Date().toISOString(),
+            action: action,
+            address: address
+        };
+        this.emergencyLogs.push(log);
+        console.log(`Emergency Action: ${action} by ${address}`);
+    }
+
+    getEmergencyLogs() {
+        return this.emergencyLogs;
+    }
+
+    async clearEmergencyLogs(pubkey) {
+        // Use silent admin check to prevent logging failed attempts
+        if (await this.isAdmin(pubkey, true)) {
+            this.emergencyLogs = [];
+            this.logAction('Logs cleared', pubkey.toString());
+            return true;
+        }
+        return false;
     }
 }
 
